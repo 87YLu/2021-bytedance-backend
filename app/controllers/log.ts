@@ -6,12 +6,7 @@ import { success, getCorrectTime } from './utils'
 class LogCtl {
   async getMyLogs(ctx: DefaultContext) {
     ctx.verifyParams({
-      type: {
-        type: ['string', 'number'],
-        require: false,
-        min: 1,
-        max: 2,
-      },
+      type: { type: ['string', 'number'], require: false, min: 1, max: 2 },
     })
 
     const { type = 1 } = ctx.query

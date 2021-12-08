@@ -7,11 +7,7 @@ import { User } from '@models'
 import { secret } from '@db'
 import { success, createVerification, sendVerificationEmail, checkVerification } from './utils'
 
-// import { Schema, model, Model, Document } from 'mongoose'
-// interface UserProps extends Document {
-//   name: string,
-//   password: string
-// }
+const emailRegex = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/
 
 class UserCtl {
   /**
@@ -19,11 +15,7 @@ class UserCtl {
    */
   async sendCreateMail(ctx: DefaultContext) {
     ctx.verifyParams({
-      email: {
-        type: 'string',
-        required: true,
-        pattern: /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/,
-      },
+      email: { type: 'string', required: true, pattern: emailRegex },
     })
 
     const { email } = ctx.request.query
@@ -53,11 +45,7 @@ class UserCtl {
    */
   async sendForgotMail(ctx: DefaultContext) {
     ctx.verifyParams({
-      email: {
-        type: 'string',
-        required: true,
-        pattern: /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/,
-      },
+      email: { type: 'string', required: true, pattern: emailRegex },
     })
 
     const { email } = ctx.request.query
@@ -81,28 +69,10 @@ class UserCtl {
    */
   async create(ctx: DefaultContext, next: Next) {
     ctx.verifyParams({
-      name: {
-        type: 'string',
-        required: true,
-        minLength: 1,
-        maxLength: 10,
-      },
-      email: {
-        type: 'string',
-        required: true,
-        pattern: /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/,
-      },
-      password: {
-        type: 'string',
-        required: true,
-        minLength: 3,
-      },
-      verifyCode: {
-        type: 'string',
-        required: true,
-        minLength: 6,
-        maxLength: 6,
-      },
+      name: { type: 'string', required: true, minLength: 1, maxLength: 10 },
+      email: { type: 'string', required: true, pattern: emailRegex },
+      password: { type: 'string', required: true, minLength: 3 },
+      verifyCode: { type: 'string', required: true, minLength: 6, maxLength: 6 },
     })
 
     const { email, password, name, verifyCode } = ctx.request.body
@@ -137,15 +107,8 @@ class UserCtl {
    */
   async login(ctx: DefaultContext, next: Next) {
     ctx.verifyParams({
-      email: {
-        type: 'string',
-        required: true,
-        pattern: /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/,
-      },
-      password: {
-        type: ['string', 'number'],
-        required: true,
-      },
+      email: { type: 'string', required: true, pattern: emailRegex },
+      password: { type: ['string', 'number'], required: true },
     })
     const { email, password } = ctx.request.body
     const user = await User.findOne({ email }).select('+password')
@@ -182,9 +145,7 @@ class UserCtl {
    */
   async updateAvatar(ctx: DefaultContext, next: Next) {
     ctx.verifyParams({
-      file: {
-        required: true,
-      },
+      file: { required: true },
     })
 
     const { file } = ctx.request.files
@@ -208,16 +169,8 @@ class UserCtl {
    */
   async updatePassword(ctx: DefaultContext, next: Next) {
     ctx.verifyParams({
-      oldPassword: {
-        type: ['string', 'number'],
-        required: true,
-        minLength: 3,
-      },
-      newPassword: {
-        type: ['string', 'number'],
-        required: true,
-        minLength: 3,
-      },
+      oldPassword: { type: ['string', 'number'], required: true, minLength: 3 },
+      newPassword: { type: ['string', 'number'], required: true, minLength: 3 },
     })
 
     const { oldPassword, newPassword } = ctx.request.body
@@ -245,17 +198,8 @@ class UserCtl {
    */
   async resetPassword(ctx: DefaultContext, next: Next) {
     ctx.verifyParams({
-      newPassword: {
-        type: 'string',
-        required: true,
-        minLength: 3,
-      },
-      verifyCode: {
-        type: 'string',
-        required: true,
-        minLength: 6,
-        maxLength: 6,
-      },
+      newPassword: { type: 'string', required: true, minLength: 3 },
+      verifyCode: { type: 'string', required: true, minLength: 6, maxLength: 6 },
     })
 
     const { newPassword, verifyCode } = ctx.request.body

@@ -8,20 +8,9 @@ class CommentCtl {
    */
   async add(ctx: DefaultContext, next: Next) {
     ctx.verifyParams({
-      type: {
-        type: 'number',
-        required: true,
-        min: 1,
-        max: 2,
-      },
-      id: {
-        type: 'string',
-        required: true,
-      },
-      content: {
-        type: 'string',
-        required: true,
-      },
+      type: { type: 'number', required: true, min: 1, max: 2 },
+      id: { type: 'string', required: true },
+      content: { type: 'string', required: true },
     })
 
     const { type, id, content } = ctx.request.body

@@ -8,10 +8,7 @@ class NewsDigestCtl {
    */
   async getNewsItem(ctx: DefaultContext, next: Next) {
     ctx.verifyParams({
-      id: {
-        type: 'string',
-        required: true,
-      },
+      id: { type: 'string', required: true },
     })
 
     const { id } = ctx.query

@@ -8,10 +8,7 @@ class CollectionCtl {
    */
   async add(ctx: DefaultContext, next: Next) {
     ctx.verifyParams({
-      newsId: {
-        type: 'string',
-        required: true,
-      },
+      newsId: { type: 'string', required: true },
     })
 
     const { newsId } = ctx.request.body
@@ -50,10 +47,7 @@ class CollectionCtl {
    */
   async delete(ctx: DefaultContext, next: Next) {
     ctx.verifyParams({
-      newsId: {
-        type: 'string',
-        required: true,
-      },
+      newsId: { type: 'string', required: true },
     })
 
     const { newsId } = ctx.request.body

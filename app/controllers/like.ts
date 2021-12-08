@@ -8,10 +8,7 @@ class LikeCtl {
    */
   async add(ctx: DefaultContext, next: Next) {
     ctx.verifyParams({
-      commentId: {
-        type: 'string',
-        required: true,
-      },
+      commentId: { type: 'string', required: true },
     })
 
     const { commentId } = ctx.request.body
@@ -49,10 +46,7 @@ class LikeCtl {
    */
   async delete(ctx: DefaultContext, next: Next) {
     ctx.verifyParams({
-      commentId: {
-        type: 'string',
-        required: true,
-      },
+      commentId: { type: 'string', required: true },
     })
 
     const { commentId } = ctx.request.body
