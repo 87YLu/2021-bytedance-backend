@@ -2,6 +2,7 @@ import bcrypt from 'bcryptjs'
 import jsonwebtoken from 'jsonwebtoken'
 import fs from 'fs'
 import path from 'path'
+import moment from 'moment'
 import { DefaultContext, Next } from 'koa'
 import { User } from '@models'
 import { secret } from '@db'
@@ -114,20 +115,22 @@ class UserCtl {
     const user = await User.findOne({ email }).select('+password')
 
     if (user == null) {
-      ctx.throw(401, '用户名不存在')
+      ctx.throw(401, '用户或密码错误')
       return
     }
 
     const correct = bcrypt.compareSync(password, user.password)
-    if (correct == null) {
-      ctx.throw(401, '密码不正确')
+
+    if (correct === false) {
+      ctx.throw(401, '用户或密码错误')
     }
+
     const { _id } = user
     const token = jsonwebtoken.sign({ _id, email }, secret, { expiresIn: '1d' })
 
     ctx.body = success({
       token,
-      expireAt: new Date().setDate(new Date().getDate() + 1).valueOf(),
+      expireAt: moment().add(1, 'day').valueOf(),
       user: {
         email: user.email,
         avatar: user.avatar,
