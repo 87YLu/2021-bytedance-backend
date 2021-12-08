@@ -1,0 +1,6 @@
+export { default as User } from './user'
+export { default as News } from './news'
+export { default as Collection } from './collection'
+export { default as Comment } from './comment'
+export { default as Like } from './like'
+export { default as Log } from './log'
