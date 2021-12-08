@@ -24,7 +24,7 @@ class NewsDigestCtl {
       ctx.throw(401, '找不到新闻主体')
     }
 
-    ctx.body = targetNews
+    ctx.body = success(targetNews)
 
     await next()
   }
@@ -40,6 +40,7 @@ class NewsDigestCtl {
     const news = await News.find({ type: Number(type) })
       .select('+digest')
       .select('+img')
+      .sort('-publishTime')
       .skip(skip)
       .limit(limit)
 

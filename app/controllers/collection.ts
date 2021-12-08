@@ -28,7 +28,7 @@ class CollectionCtl {
 
     const exist = await Collection.findOne({ userId: ctx.userId, newsId })
 
-    if (exist) {
+    if (exist != null) {
       ctx.throw(401, '请勿重复收藏')
     }
 
@@ -66,7 +66,7 @@ class CollectionCtl {
 
     const exist = await Collection.findOne({ userId: ctx.userId, newsId })
 
-    if (exist != null) {
+    if (exist == null) {
       ctx.throw(401, '请勿重复取消收藏')
     }
 
@@ -81,7 +81,7 @@ class CollectionCtl {
   }
 
   /**
-   * 获取我的收藏
+   * 分页获取我的收藏
    */
   async getMyCollections(ctx: DefaultContext, next: Next) {
     const { size, current } = ctx.query
@@ -91,6 +91,7 @@ class CollectionCtl {
     const temp = await Collection.find({ userId: ctx.userId })
       .select('+digest')
       .populate({ path: 'newsId', select: '+digest' })
+      .sort('-createdAt')
       .skip(skip)
       .limit(limit)
 

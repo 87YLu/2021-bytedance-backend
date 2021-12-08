@@ -1,6 +1,6 @@
 import { DefaultContext, Next } from 'koa'
 import { Like, Comment } from '@models'
-import { success, paging } from './utils'
+import { success, paging, getCorrectTime } from './utils'
 
 class LikeCtl {
   /**
@@ -27,7 +27,7 @@ class LikeCtl {
 
     const exist = await Like.findOne({ userId: ctx.userId, commentId })
 
-    if (exist) {
+    if (exist != null) {
       ctx.throw(401, '请勿重复点赞')
     }
 
@@ -65,7 +65,7 @@ class LikeCtl {
 
     const exist = await Like.findOne({ userId: ctx.userId, commentId })
 
-    if (exist != null) {
+    if (exist == null) {
       ctx.throw(401, '请勿重复取消点赞')
     }
 
@@ -87,15 +87,17 @@ class LikeCtl {
     const { skip, limit } = paging(size, current)
 
     const temp = await Like.find({ userId: ctx.userId })
+      .sort('-createdAt')
       .populate('commentId')
       .skip(skip)
       .limit(limit)
+
     const total = await Like.count({ userId: ctx.userId })
 
     const res = temp.map(item => {
-      const { _id, commentId: comment } = item
+      const { _id, commentId: comment, createdAt } = item
       const { newsId, content, _id: commentId } = comment as any
-      return { _id, commentId, newsId, content }
+      return { _id, commentId, newsId, content, time: getCorrectTime(createdAt) }
     })
 
     ctx.body = success({ records: res, total })

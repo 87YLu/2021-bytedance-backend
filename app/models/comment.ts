@@ -43,6 +43,8 @@ interface commentProps extends Document {
   content: string
   parentId: string
   following: string[]
+  createdAt: Date
+  updatedAt: Date
 }
 
 export default model<commentProps>('Comment', CommentSchema, 'comments')

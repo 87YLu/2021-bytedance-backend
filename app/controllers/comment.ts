@@ -117,11 +117,14 @@ class CommentCtl {
     const { size, current } = ctx.query
     const { skip, limit } = paging(size, current)
     const total = await Comment.count({ userId: ctx.userId })
-    const temp = await Comment.find({ userId: ctx.userId }).skip(skip).limit(limit)
+    const temp = await Comment.find({ userId: ctx.userId })
+      .sort('-createdAt')
+      .skip(skip)
+      .limit(limit)
 
     const res = temp.map(item => {
-      const { _id, newsId, content, parentId } = item
-      return { _id, newsId, content, parentId }
+      const { _id, newsId, content, parentId, createdAt } = item
+      return { _id, newsId, content, parentId, time: getCorrectTime(createdAt) }
     })
 
     ctx.body = success({ records: res, total })
@@ -164,9 +167,9 @@ class CommentCtl {
       },
       { $match: matches },
     ])
+      .sort('-createdAt')
       .skip(skip)
       .limit(limit)
-      .sort('-createdAt')
 
     let res = temp.map(item => {
       const { _id, content, createdAt, likes } = item
