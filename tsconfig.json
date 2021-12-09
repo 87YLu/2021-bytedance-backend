@@ -30,6 +30,7 @@
     "baseUrl": "./",                                     /* Specify the base directory to resolve non-relative module names. */
     "paths": {
       "@db": ["./config/db.ts"],
+      "@email": ["./config/email.ts"],
       "@models": ["./app/models"],
       "@controllers": ["./app/controllers"],
       "@routes": ["./app/routes"],

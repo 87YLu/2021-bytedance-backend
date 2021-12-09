@@ -7,7 +7,7 @@ const CommentSchema = new Schema(
       select: false,
     },
     userId: {
-      type: String,
+      type: Schema.Types.ObjectId,
       required: true,
     },
     newsId: {
@@ -29,7 +29,6 @@ const CommentSchema = new Schema(
           ref: 'Comment',
         },
       ],
-      select: false,
     },
   },
   {

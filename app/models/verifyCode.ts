@@ -20,6 +20,10 @@ const verifyCodeSchema = new Schema(
   },
 )
 
+const SECONDS_IN_15_MINUTES = 60 * 15
+
+verifyCodeSchema.index({ createdAt: 1 }, { expireAfterSeconds: SECONDS_IN_15_MINUTES })
+
 interface verifyCodeProps extends Document {
   code: string
   email: string
@@ -27,7 +31,5 @@ interface verifyCodeProps extends Document {
   createdAt: Date
   updatedAt: Date
 }
-
-verifyCodeSchema.index({ createdAt: 1 }, { expireAfterSeconds: 900 })
 
 export default model<verifyCodeProps>('VerifyCode', verifyCodeSchema, 'verify_codes')

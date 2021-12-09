@@ -24,6 +24,10 @@ const LogSchema = new Schema(
   },
 )
 
+const SECONDS_IN_30_DAYS = 60 * 60 * 24 * 30
+
+LogSchema.index({ createdAt: 1 }, { expireAfterSeconds: SECONDS_IN_30_DAYS })
+
 interface logProps extends Document {
   userId: string
   api: string

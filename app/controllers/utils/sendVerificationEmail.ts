@@ -1,17 +1,18 @@
 import nodemailer from 'nodemailer'
+import { emailSourceAddress, emailSourcePass, host, secure, port } from '@email'
 
 const transport = nodemailer.createTransport({
-  host: 'smtp.qq.com',
-  secure: true,
-  port: 465,
+  host,
+  secure,
+  port,
   auth: {
-    user: '1790599287@qq.com',
-    pass: '',
+    user: emailSourceAddress,
+    pass: emailSourcePass,
   },
 })
 
 const mailOptions = {
-  from: '【给后台疯狂提issue】 1790599287@qq.com',
+  from: `【给后台疯狂提issue】 ${emailSourceAddress}`,
   to: '{to}',
   subject: '{subject}',
   html:

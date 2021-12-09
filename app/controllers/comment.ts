@@ -10,7 +10,7 @@ class CommentCtl {
     ctx.verifyParams({
       type: { type: 'number', required: true, min: 1, max: 2 },
       id: { type: 'string', required: true },
-      content: { type: 'string', required: true },
+      content: { type: 'string', required: true, maxLength: 200 },
     })
 
     const { type, id, content } = ctx.request.body
@@ -47,7 +47,7 @@ class CommentCtl {
         let targetComment
 
         try {
-          targetComment = await Comment.findById(id).select('+following')
+          targetComment = await Comment.findById(id)
         } catch (e) {
           ctx.throw(401, '评论不存在')
         }
@@ -99,7 +99,7 @@ class CommentCtl {
       return
     }
 
-    if (targetComment.userId !== ctx.userId) {
+    if (targetComment.userId.toString() !== ctx.userId) {
       ctx.throw(401, '没有权限执行此操作')
     }
 
@@ -165,15 +165,49 @@ class CommentCtl {
           as: 'likes',
         },
       },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'userId',
+          foreignField: '_id',
+          as: 'user',
+        },
+      },
       { $match: matches },
+      { $sort: { createdAt: -1 } },
+      { $skip: skip },
+      { $limit: limit },
     ])
-      .sort('-createdAt')
-      .skip(skip)
-      .limit(limit)
 
     let res = temp.map(item => {
-      const { _id, content, createdAt, likes } = item
-      return { _id, content, time: getCorrectTime(createdAt), likesNum: likes.length }
+      const { _id, content, createdAt, likes, user, following } = item
+      const { name: userName, avatar: userAvatar, _id: userId } = user[0] || {}
+      const likesNum = likes.length
+      let isLike = false
+
+      for (let i = 0; i < likesNum; i += 1) {
+        if (likes[i].userId === ctx.userId) {
+          isLike = true
+          break
+        }
+      }
+
+      const obj = {
+        _id,
+        content,
+        time: getCorrectTime(createdAt),
+        likesNum,
+        userName,
+        userAvatar,
+        isMine: userId?.toString() === ctx.userId,
+        isLike,
+      }
+
+      if (Number(type) === 1) {
+        ;(obj as any).followNum = following.length
+      }
+
+      return obj
     })
 
     if (Number(orderBy) === 2) {

@@ -1,5 +1,5 @@
 import { DefaultContext, Next } from 'koa'
-import { News, NewsType } from '@models'
+import { News, NewsType, Collection } from '@models'
 import { success, paging } from './utils'
 
 class NewsDigestCtl {
@@ -22,9 +22,13 @@ class NewsDigestCtl {
 
     if (targetNews == null) {
       ctx.throw(401, '找不到新闻主体')
+      return
     }
 
-    ctx.body = success(targetNews)
+    const isCollection = (await Collection.findOne({ userId: ctx.userId, newsId: id })) != null
+    const { _id, title, content, publishTime, source } = targetNews
+
+    ctx.body = success({ _id, title, content, publishTime, source, isCollection })
 
     await next()
   }
