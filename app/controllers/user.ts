@@ -148,7 +148,7 @@ class UserCtl {
    */
   async updateAvatar(ctx: DefaultContext, next: Next) {
     ctx.verifyParams({
-      file: { required: true },
+      file: { required: true, type: 'file', fileType: 'image', maxSize: 10 * 1024 * 1024 },
     })
 
     const { file } = ctx.request.files

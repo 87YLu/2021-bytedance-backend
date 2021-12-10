@@ -4,12 +4,14 @@ export interface IParams {
 
 export interface IRules {
   [key: string]: {
-    required?: Boolean
-    type?: String | Array<String>
-    minLength?: Number
-    maxLength?: Number
-    min?: Number
-    max?: Number
+    type: string | Array<string>
+    required?: boolean
+    minLength?: number
+    maxLength?: number
+    min?: number
+    max?: number
     pattern?: RegExp
+    fileType?: string
+    maxSize?: number
   }
 }

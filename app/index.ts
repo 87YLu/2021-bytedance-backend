@@ -10,7 +10,13 @@ import { validator } from './middleware'
 
 const app = new Koa()
 
-app.use(koaStatic(path.join(__dirname, 'public')))
+const MILLSECONDS_IN_1_YEAR = 1000 * 60 * 60 * 24 * 365
+
+app.use(
+  koaStatic(path.join(__dirname, 'public'), {
+    maxage: MILLSECONDS_IN_1_YEAR,
+  }),
+)
 
 app.use(
   error({
