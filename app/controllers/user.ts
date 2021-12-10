@@ -3,10 +3,18 @@ import jsonwebtoken from 'jsonwebtoken'
 import fs from 'fs'
 import path from 'path'
 import moment from 'moment'
+import sharp from 'sharp'
+import crypto from 'crypto'
 import { DefaultContext, Next } from 'koa'
 import { User } from '@models'
 import { secret } from '@db'
-import { success, createVerification, sendVerificationEmail, checkVerification } from './utils'
+import {
+  success,
+  createVerification,
+  sendVerificationEmail,
+  checkVerification,
+  uploadFile,
+} from './utils'
 
 const emailRegex = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/
 
@@ -148,19 +156,28 @@ class UserCtl {
    */
   async updateAvatar(ctx: DefaultContext, next: Next) {
     ctx.verifyParams({
-      file: { required: true, type: 'file', fileType: 'image', maxSize: 10 * 1024 * 1024 },
+      file: { required: true, type: 'file', fileType: 'image', maxSize: 5 * 1024 * 1024 },
     })
 
     const { file } = ctx.request.files
-    const reader = fs.createReadStream(file.path)
-    const basename = path.basename(file.path)
-    const filePath = path.join(__dirname, '../public/uploads/') + `/${basename}`
-    const upStream = fs.createWriteStream(filePath)
-    reader.pipe(upStream)
+
+    const { basename } = await uploadFile(file, async (oldPath, oldName) => {
+      const fileSuffix = oldName.split('.')[1]
+      const basename = `${crypto
+        .createHash('md5')
+        .update(oldName, 'utf-8')
+        .digest('hex')}${Date.now()}.${fileSuffix}`
+      const filePath = path.join(path.join(__dirname, `../public/uploads/${basename}`))
+
+      await sharp(oldPath).resize(150, 150).toFile(filePath)
+
+      fs.unlinkSync(oldPath)
+
+      return { filePath, basename }
+    })
 
     const res = `${ctx.origin}/uploads/${basename}`
-
-    await User.findById(ctx.userId).update({ avatar: res })
+    await User.findById(ctx.userId).updateOne({ avatar: res })
 
     ctx.body = success({ avatar: res })
 
@@ -190,7 +207,7 @@ class UserCtl {
       ctx.throw(400, '旧密码不能与新密码相同')
     }
 
-    await user.update({ password: psw })
+    await user.updateOne({ password: psw })
     ctx.body = success()
 
     await next()
@@ -216,7 +233,7 @@ class UserCtl {
     const salt = bcrypt.genSaltSync(10)
     const psw = bcrypt.hashSync(newPassword, salt)
 
-    await User.findById(ctx.userId).update({ password: psw })
+    await User.findById(ctx.userId).updateOne({ password: psw })
 
     ctx.body = success()
 
