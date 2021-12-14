@@ -167,7 +167,7 @@ class UserCtl {
         .createHash('md5')
         .update(oldName, 'utf-8')
         .digest('hex')}${Date.now()}.${fileSuffix}`
-      const filePath = path.join(path.join(__dirname, `../public/uploads/${basename}`))
+      const filePath = path.join(path.join(process.cwd(), `./public/uploads/${basename}`))
 
       await sharp(oldPath).resize(150, 150).toFile(filePath)
 

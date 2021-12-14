@@ -13,7 +13,7 @@ const app = new Koa()
 const MILLSECONDS_IN_1_YEAR = 1000 * 60 * 60 * 24 * 365
 
 app.use(
-  koaStatic(path.join(__dirname, 'public'), {
+  koaStatic(path.join(process.cwd(), './public'), {
     maxage: MILLSECONDS_IN_1_YEAR,
   }),
 )

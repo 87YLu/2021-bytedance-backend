@@ -13,7 +13,7 @@ const uploadFile = (
   new Promise<UploadRes>(resolve => {
     const reader = fs.createReadStream(file.path)
     const basename = path.basename(file.path)
-    const filePath = path.join(__dirname, '../../public/uploads') + `/${basename}`
+    const filePath = path.join(process.cwd(), './public/uploads') + `/${basename}`
     const upStream = fs.createWriteStream(filePath)
     reader.pipe(upStream)
 

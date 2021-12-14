@@ -5,13 +5,13 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon -r tsconfig-paths/register app/index.ts",
-    "start": "cross-env NODE_ENV=production ts-node -r tsconfig-paths/register app/index.ts"
+    "start": "cross-env NODE_ENV=production ts-node -r tsconfig-paths/register app/index.ts",
+    "build": "node scripts/build.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@types/node": "^16.11.12",
     "bcryptjs": "^2.4.3",
     "jsonwebtoken": "^8.5.1",
     "koa": "^2.13.4",
@@ -23,8 +23,7 @@
     "moment": "^2.29.1",
     "mongoose": "^6.0.15",
     "nodemailer": "^6.7.2",
-    "sharp": "^0.29.3",
-    "tinify": "^1.6.1"
+    "sharp": "^0.29.3"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
@@ -34,18 +33,23 @@
     "@types/koa-router": "^7.4.4",
     "@types/koa-static": "^4.0.2",
     "@types/koa2-ratelimit": "^0.9.1",
+    "@types/node": "^16.11.12",
     "@types/nodemailer": "^6.4.4",
     "@types/sharp": "^0.29.4",
     "@typescript-eslint/eslint-plugin": "^5.6.0",
     "@typescript-eslint/parser": "^5.6.0",
+    "clean-webpack-plugin": "^4.0.0",
     "cross-env": "^7.0.3",
     "eslint": "^7.32.0",
     "eslint-config-standard": "^16.0.3",
     "eslint-plugin-import": "^2.25.3",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^5.2.0",
-    "nodemon": "^2.0.15",
-    "ts-node": "^10.4.0",
-    "tsconfig-paths": "^3.12.0"
+    "fs-extra": "^10.0.0",
+    "ts-loader": "^9.2.6",
+    "tsconfig-paths": "^3.12.0",
+    "webpack": "^5.65.0",
+    "webpack-cli": "^4.9.1",
+    "webpack-node-externals": "^3.0.0"
   }
 }
