@@ -5,7 +5,7 @@ import path from 'path'
 import moment from 'moment'
 import sharp from 'sharp'
 import crypto from 'crypto'
-import { DefaultContext, Next } from 'koa'
+import { Context, Next } from 'koa'
 import { User } from '@models'
 import { secret } from '@db'
 import {
@@ -22,7 +22,7 @@ class UserCtl {
   /**
    * 发送创建用户的邮件
    */
-  async sendCreateMail(ctx: DefaultContext) {
+  async sendCreateMail(ctx: Context) {
     ctx.verifyParams({
       email: { type: 'string', required: true, pattern: emailRegex },
     })
@@ -36,12 +36,12 @@ class UserCtl {
     }
 
     const code = await createVerification({
-      email,
+      email: email as string,
       type: 1,
     })
 
     await sendVerificationEmail({
-      to: email,
+      to: email as string,
       subject: '创建用户',
       verification: code,
     })
@@ -52,7 +52,7 @@ class UserCtl {
   /**
    * 发送忘记密码的邮件
    */
-  async sendForgotMail(ctx: DefaultContext) {
+  async sendForgotMail(ctx: Context) {
     ctx.verifyParams({
       email: { type: 'string', required: true, pattern: emailRegex },
     })
@@ -60,12 +60,12 @@ class UserCtl {
     const { email } = ctx.request.query
 
     const code = await createVerification({
-      email,
+      email: email as string,
       type: 2,
     })
 
     await sendVerificationEmail({
-      to: email,
+      to: email as string,
       subject: '重置密码',
       verification: code,
     })
@@ -76,7 +76,7 @@ class UserCtl {
   /**
    * 用户注册
    */
-  async create(ctx: DefaultContext, next: Next) {
+  async create(ctx: Context, next: Next) {
     ctx.verifyParams({
       name: { type: 'string', required: true, minLength: 1, maxLength: 10 },
       email: { type: 'string', required: true, pattern: emailRegex },
@@ -114,7 +114,7 @@ class UserCtl {
   /**
    * 用户登录
    */
-  async login(ctx: DefaultContext, next: Next) {
+  async login(ctx: Context, next: Next) {
     ctx.verifyParams({
       email: { type: 'string', required: true, pattern: emailRegex },
       password: { type: ['string', 'number'], required: true },
@@ -154,12 +154,12 @@ class UserCtl {
   /**
    * 修改头像
    */
-  async updateAvatar(ctx: DefaultContext, next: Next) {
+  async updateAvatar(ctx: Context, next: Next) {
     ctx.verifyParams({
       file: { required: true, type: 'file', fileType: 'image', maxSize: 5 * 1024 * 1024 },
     })
 
-    const { file } = ctx.request.files
+    const { file } = ctx.request.files!
 
     const { basename } = await uploadFile(file, async (oldPath, oldName) => {
       const fileSuffix = oldName.split('.')[1]
@@ -187,7 +187,7 @@ class UserCtl {
   /**
    * 修改密码
    */
-  async updatePassword(ctx: DefaultContext, next: Next) {
+  async updatePassword(ctx: Context, next: Next) {
     ctx.verifyParams({
       oldPassword: { type: ['string', 'number'], required: true, minLength: 3 },
       newPassword: { type: ['string', 'number'], required: true, minLength: 3 },
@@ -216,7 +216,7 @@ class UserCtl {
   /**
    * 重置密码
    */
-  async resetPassword(ctx: DefaultContext, next: Next) {
+  async resetPassword(ctx: Context, next: Next) {
     ctx.verifyParams({
       newPassword: { type: 'string', required: true, minLength: 3 },
       verifyCode: { type: 'string', required: true, minLength: 6, maxLength: 6 },

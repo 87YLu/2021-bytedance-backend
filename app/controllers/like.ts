@@ -1,4 +1,4 @@
-import { DefaultContext, Next } from 'koa'
+import { Context, Next } from 'koa'
 import { Like, Comment } from '@models'
 import { success, paging, getCorrectTime } from './utils'
 
@@ -6,7 +6,7 @@ class LikeCtl {
   /**
    * 添加点赞
    */
-  async add(ctx: DefaultContext, next: Next) {
+  async add(ctx: Context, next: Next) {
     ctx.verifyParams({
       commentId: { type: 'string', required: true },
     })
@@ -44,7 +44,7 @@ class LikeCtl {
   /**
    * 取消点赞
    */
-  async delete(ctx: DefaultContext, next: Next) {
+  async delete(ctx: Context, next: Next) {
     ctx.verifyParams({
       commentId: { type: 'string', required: true },
     })
@@ -82,9 +82,9 @@ class LikeCtl {
   /**
    * 分页获取我的点赞
    */
-  async getMyLikes(ctx: DefaultContext, next: Next) {
+  async getMyLikes(ctx: Context, next: Next) {
     const { size, current } = ctx.query
-    const { skip, limit } = paging(size, current)
+    const { skip, limit } = paging(size as string | undefined, current as string | undefined)
 
     const temp = await Like.find({ userId: ctx.userId })
       .sort('-createdAt')

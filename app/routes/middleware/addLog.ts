@@ -1,7 +1,7 @@
-import { DefaultContext } from 'koa'
+import { Context } from 'koa'
 import { Log } from '@models'
 
-const addLog = async (ctx: DefaultContext) => {
+const addLog = async (ctx: Context) => {
   let params = ['GET', 'HEAD'].includes(ctx.method.toUpperCase())
     ? ctx.request.query
     : ctx.request.body

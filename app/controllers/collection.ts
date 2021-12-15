@@ -1,4 +1,4 @@
-import { DefaultContext, Next } from 'koa'
+import { Context, Next } from 'koa'
 import { Collection, News } from '@models'
 import { success, getCorrectTime, paging } from './utils'
 
@@ -6,7 +6,7 @@ class CollectionCtl {
   /**
    * 添加收藏
    */
-  async add(ctx: DefaultContext, next: Next) {
+  async add(ctx: Context, next: Next) {
     ctx.verifyParams({
       newsId: { type: 'string', required: true },
     })
@@ -45,7 +45,7 @@ class CollectionCtl {
   /**
    * 取消收藏
    */
-  async delete(ctx: DefaultContext, next: Next) {
+  async delete(ctx: Context, next: Next) {
     ctx.verifyParams({
       newsId: { type: 'string', required: true },
     })
@@ -83,9 +83,9 @@ class CollectionCtl {
   /**
    * 分页获取我的收藏
    */
-  async getMyCollections(ctx: DefaultContext, next: Next) {
+  async getMyCollections(ctx: Context, next: Next) {
     const { size, current } = ctx.query
-    const { skip, limit } = paging(size, current)
+    const { skip, limit } = paging(size as string | undefined, current as string | undefined)
 
     const total = await Collection.count({ userId: ctx.userId })
     const temp = await Collection.find({ userId: ctx.userId })

@@ -1,4 +1,4 @@
-import { DefaultContext, Next } from 'koa'
+import { Context, Next } from 'koa'
 import { News, NewsType, Collection } from '@models'
 import { success, paging } from './utils'
 
@@ -6,7 +6,7 @@ class NewsDigestCtl {
   /**
    * 获取新闻主体
    */
-  async getNewsItem(ctx: DefaultContext, next: Next) {
+  async getNewsItem(ctx: Context, next: Next) {
     ctx.verifyParams({
       id: { type: 'string', required: true },
     })
@@ -36,9 +36,9 @@ class NewsDigestCtl {
   /**
    * 分页获取新闻摘要
    */
-  async getNewsDigest(ctx: DefaultContext, next: Next) {
+  async getNewsDigest(ctx: Context, next: Next) {
     const { size, current, type } = ctx.query
-    const { skip, limit } = paging(size, current)
+    const { skip, limit } = paging(size as string | undefined, current as string | undefined)
 
     const total = await News.count({ type: Number(type) })
     const news = await News.find({ type: Number(type) })
@@ -56,7 +56,7 @@ class NewsDigestCtl {
   /**
    * 获取新闻类型
    */
-  async getNewsType(ctx: DefaultContext) {
+  async getNewsType(ctx: Context) {
     const temp = await NewsType.find()
 
     const res = temp.map(item => ({

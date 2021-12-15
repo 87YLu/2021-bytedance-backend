@@ -1,12 +1,12 @@
-import { DefaultContext } from 'koa'
+import { Context } from 'koa'
 import moment from 'moment'
 import { Log, News, NewsType } from '@models'
 import { success, getCorrectTime } from './utils'
 
 class LogCtl {
-  async getMyLogs(ctx: DefaultContext) {
+  async getMyLogs(ctx: Context) {
     ctx.verifyParams({
-      type: { type: ['string', 'number'], require: false, min: 1, max: 2 },
+      type: { type: ['string', 'number'], required: false, min: 1, max: 2 },
     })
 
     const { type = 1 } = ctx.query

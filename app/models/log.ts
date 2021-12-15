@@ -32,7 +32,7 @@ interface logProps extends Document {
   userId: string
   api: string
   params: any
-  createdAt: Date | Object
+  createdAt: Date | any
   updatedAt: Date
 }
 

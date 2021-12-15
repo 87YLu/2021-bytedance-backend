@@ -1,4 +1,4 @@
 export interface IJwtDecodeMsg {
-  _id: String
-  email: String
+  _id: string
+  email: string
 }

@@ -10,11 +10,10 @@ const router = new Router({
   prefix: '/api',
 })
 
-router.use(collection.routes()).use(collection.allowedMethods())
-router.use(comment.routes()).use(comment.allowedMethods())
-router.use(like.routes()).use(like.allowedMethods())
-router.use(log.routes()).use(log.allowedMethods())
-router.use(user.routes()).use(user.allowedMethods())
-router.use(news.routes()).use(news.allowedMethods())
+const routers = [collection, comment, like, log, user, news]
+
+routers.forEach(route => {
+  router.use(route.routes()).use(route.allowedMethods())
+})
 
 export default router

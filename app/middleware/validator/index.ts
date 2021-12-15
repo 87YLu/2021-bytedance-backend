@@ -31,10 +31,10 @@ export default function (app: Koa) {
     this.throw(422, error)
   }
 
-  return async function verifyParam(ctx: Koa.DefaultContext, next: Koa.Next) {
+  return async function verifyParam(ctx: Koa.Context, next: Koa.Next) {
     try {
       await next()
-    } catch (err) {
+    } catch (err: any) {
       if (err) {
         ctx.throw(422, err)
       }

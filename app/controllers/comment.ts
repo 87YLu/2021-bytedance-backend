@@ -1,4 +1,4 @@
-import { DefaultContext, Next } from 'koa'
+import { Context, Next } from 'koa'
 import { Comment, News } from '@models'
 import { success, paging, getCorrectTime } from './utils'
 
@@ -6,7 +6,7 @@ class CommentCtl {
   /**
    * 评论评论
    */
-  async add(ctx: DefaultContext, next: Next) {
+  async add(ctx: Context, next: Next) {
     ctx.verifyParams({
       type: { type: 'number', required: true, min: 1, max: 2 },
       id: { type: 'string', required: true },
@@ -79,7 +79,7 @@ class CommentCtl {
   /**
    * 删除评论
    */
-  async delete(ctx: DefaultContext, next: Next) {
+  async delete(ctx: Context, next: Next) {
     ctx.verifyParams({
       id: { type: 'string', required: true },
     })
@@ -113,9 +113,9 @@ class CommentCtl {
   /**
    * 分页获取我的评论
    */
-  async getMyComments(ctx: DefaultContext, next: Next) {
+  async getMyComments(ctx: Context, next: Next) {
     const { size, current } = ctx.query
-    const { skip, limit } = paging(size, current)
+    const { skip, limit } = paging(size as string | undefined, current as string | undefined)
     const total = await Comment.count({ userId: ctx.userId })
     const temp = await Comment.find({ userId: ctx.userId })
       .sort('-createdAt')
@@ -135,7 +135,7 @@ class CommentCtl {
   /**
    * 分页获取评论
    */
-  async getComments(ctx: DefaultContext, next: Next) {
+  async getComments(ctx: Context, next: Next) {
     ctx.verifyParams({
       id: { type: 'string', required: true },
       type: { type: ['number', 'string'], required: true, min: 1, max: 2 },
@@ -143,7 +143,7 @@ class CommentCtl {
     })
 
     const { size, current, type, orderBy, id } = ctx.query
-    const { skip, limit } = paging(size, current)
+    const { skip, limit } = paging(size as string | undefined, current as string | undefined)
 
     let matches
 
