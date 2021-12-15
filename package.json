@@ -2,7 +2,6 @@
   "name": "2021-bytedance-backend",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
     "dev": "nodemon -r tsconfig-paths/register app/index.ts",
     "start": "cross-env NODE_ENV=production ts-node -r tsconfig-paths/register app/index.ts",
