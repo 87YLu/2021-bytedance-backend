@@ -145,7 +145,7 @@ class CommentCtl {
     const { size, current, type, orderBy, id } = ctx.query
     const { skip, limit } = paging(size as string | undefined, current as string | undefined)
 
-    let matches
+    let matches = {}
 
     if (Number(type) === 1) {
       matches = { newsId: id, parentId: 'root' }
