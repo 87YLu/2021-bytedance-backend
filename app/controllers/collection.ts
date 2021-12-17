@@ -1,6 +1,6 @@
 import { Context, Next } from 'koa'
 import { Collection, News } from '@models'
-import { success, getCorrectTime, paging } from './utils'
+import { getCorrectTime, paging } from './utils'
 
 class CollectionCtl {
   /**
@@ -37,7 +37,7 @@ class CollectionCtl {
       newsId: targetNews!._id,
     }).save()
 
-    ctx.body = success()
+    ctx.success()
 
     await next()
   }
@@ -75,7 +75,7 @@ class CollectionCtl {
       newsId,
     })
 
-    ctx.body = success()
+    ctx.success()
 
     await next()
   }
@@ -101,7 +101,7 @@ class CollectionCtl {
       return { _id, newsId, title, digest, publishTime, source, time: getCorrectTime(createdAt) }
     })
 
-    ctx.body = success({ records: res, total })
+    ctx.success({ records: res, total })
 
     await next()
   }

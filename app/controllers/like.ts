@@ -1,6 +1,6 @@
 import { Context, Next } from 'koa'
 import { Like, Comment } from '@models'
-import { success, paging, getCorrectTime } from './utils'
+import { paging, getCorrectTime } from './utils'
 
 class LikeCtl {
   /**
@@ -36,7 +36,7 @@ class LikeCtl {
       commentId,
     }).save()
 
-    ctx.body = success()
+    ctx.success()
 
     await next()
   }
@@ -74,7 +74,7 @@ class LikeCtl {
       commentId,
     })
 
-    ctx.body = success()
+    ctx.success()
 
     await next()
   }
@@ -100,7 +100,7 @@ class LikeCtl {
       return { _id, commentId, newsId, content, time: getCorrectTime(createdAt) }
     })
 
-    ctx.body = success({ records: res, total })
+    ctx.success({ records: res, total })
 
     await next()
   }

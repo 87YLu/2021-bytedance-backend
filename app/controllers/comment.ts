@@ -1,6 +1,6 @@
 import { Context, Next } from 'koa'
 import { Comment, News } from '@models'
-import { success, paging, getCorrectTime } from './utils'
+import { paging, getCorrectTime } from './utils'
 
 class CommentCtl {
   /**
@@ -37,7 +37,7 @@ class CommentCtl {
           parentId: 'root',
         }).save()
 
-        ctx.body = success()
+        ctx.success()
 
         break
       }
@@ -67,7 +67,7 @@ class CommentCtl {
         targetComment.following.push(newComment._id)
         targetComment.save()
 
-        ctx.body = success()
+        ctx.success()
 
         break
       }
@@ -105,7 +105,7 @@ class CommentCtl {
 
     targetComment.delete()
 
-    ctx.body = success()
+    ctx.success()
 
     await next()
   }
@@ -127,7 +127,7 @@ class CommentCtl {
       return { _id, newsId, content, parentId, time: getCorrectTime(createdAt) }
     })
 
-    ctx.body = success({ records: res, total })
+    ctx.success({ records: res, total })
 
     await next()
   }
@@ -214,7 +214,7 @@ class CommentCtl {
       res = res.sort((a, b) => b.likesNum - a.likesNum)
     }
 
-    ctx.body = success({ records: res, total })
+    ctx.success({ records: res, total })
 
     await next()
   }

@@ -1,4 +1,3 @@
-export { default as success } from './success'
 export { default as paging } from './paging'
 export { default as random } from './random'
 export { default as sendVerificationEmail } from './sendVerificationEmail'

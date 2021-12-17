@@ -1,7 +1,7 @@
 import { Context } from 'koa'
 import moment from 'moment'
 import { Log, News, NewsType } from '@models'
-import { success, getCorrectTime } from './utils'
+import { getCorrectTime } from './utils'
 
 class LogCtl {
   async getMyLogs(ctx: Context) {
@@ -46,7 +46,7 @@ class LogCtl {
       typeTimes[newsTypeMap[newsId]] += 1
     })
 
-    ctx.body = success({
+    ctx.success({
       useTimeTimes,
       typeTimes,
     })

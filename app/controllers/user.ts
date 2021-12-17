@@ -9,7 +9,6 @@ import { Context, Next } from 'koa'
 import { User } from '@models'
 import { secret } from '@db'
 import {
-  success,
   createVerification,
   sendVerificationEmail,
   checkVerification,
@@ -46,7 +45,7 @@ class UserCtl {
       verification: code,
     })
 
-    ctx.body = success()
+    ctx.success()
   }
 
   /**
@@ -70,7 +69,7 @@ class UserCtl {
       verification: code,
     })
 
-    ctx.body = success()
+    ctx.success()
   }
 
   /**
@@ -106,7 +105,8 @@ class UserCtl {
       avatar: `${ctx.origin}/origins/origin_avatar.png`,
     }
     await new User(userMsg).save()
-    ctx.body = success()
+
+    ctx.success()
 
     await next()
   }
@@ -136,7 +136,7 @@ class UserCtl {
     const { _id } = user
     const token = jsonwebtoken.sign({ _id, email }, secret, { expiresIn: '1d' })
 
-    ctx.body = success({
+    ctx.success({
       token,
       expireAt: moment().add(1, 'day').valueOf(),
       user: {
@@ -145,8 +145,6 @@ class UserCtl {
         name: user.name,
       },
     })
-
-    ctx.userId = _id
 
     await next()
   }
@@ -179,7 +177,7 @@ class UserCtl {
     const res = `${ctx.origin}/uploads/${basename}`
     await User.findById(ctx.userId).updateOne({ avatar: res })
 
-    ctx.body = success({ avatar: res })
+    ctx.success({ avatar: res })
 
     await next()
   }
@@ -208,7 +206,8 @@ class UserCtl {
     }
 
     await user.updateOne({ password: psw })
-    ctx.body = success()
+
+    ctx.success()
 
     await next()
   }
@@ -235,7 +234,7 @@ class UserCtl {
 
     await User.findById(ctx.userId).updateOne({ password: psw })
 
-    ctx.body = success()
+    ctx.success()
 
     await next()
   }

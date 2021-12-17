@@ -6,7 +6,7 @@ import mongoose from 'mongoose'
 import path from 'path'
 import { connectionStr } from '@db'
 import router from '@routes'
-import { validator } from './middleware'
+import { validator, success } from './middleware'
 
 const app = new Koa()
 
@@ -43,6 +43,8 @@ app.use(
 )
 
 validator(app)
+
+success(app)
 
 app.use(router.routes())
 

@@ -1,6 +1,6 @@
 import { Context, Next } from 'koa'
 import { News, NewsType, Collection } from '@models'
-import { success, paging } from './utils'
+import { paging } from './utils'
 
 class NewsDigestCtl {
   /**
@@ -28,7 +28,7 @@ class NewsDigestCtl {
     const isCollection = (await Collection.findOne({ userId: ctx.userId, newsId: id })) != null
     const { _id, title, content, publishTime, source } = targetNews
 
-    ctx.body = success({ _id, title, content, publishTime, source, isCollection })
+    ctx.success({ _id, title, content, publishTime, source, isCollection })
 
     await next()
   }
@@ -48,7 +48,7 @@ class NewsDigestCtl {
       .skip(skip)
       .limit(limit)
 
-    ctx.body = success({ records: news, total })
+    ctx.success({ records: news, total })
 
     await next()
   }
@@ -64,7 +64,7 @@ class NewsDigestCtl {
       name: item.typeName,
     }))
 
-    ctx.body = success(res)
+    ctx.success(res)
   }
 }
 
