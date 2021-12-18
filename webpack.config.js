@@ -3,7 +3,7 @@ const nodeExternals = require('webpack-node-externals')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
 module.exports = {
-  entry: './app/index.ts',
+  entry: './scripts/start.ts',
   mode: 'production',
   module: {
     unknownContextCritical: false,
@@ -22,6 +22,7 @@ module.exports = {
   resolve: {
     extensions: ['.ts'],
     alias: {
+      '@app': path.join(__dirname, './app/index.ts'),
       '@db': path.join(__dirname, './config/db.ts'),
       '@email': path.join(__dirname, './config/email.ts'),
       '@models': path.join(__dirname, './app/models'),

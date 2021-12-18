@@ -1,7 +1,7 @@
-const webpack = require('webpack')
+import webpack from 'webpack'
+import path from 'path'
+import fs from 'fs-extra'
 const config = require('../webpack.config')
-const path = require('path')
-const fs = require('fs-extra')
 
 const makePackageJson = () => {
   const packageJSON = JSON.parse(
@@ -20,13 +20,13 @@ const makePackageJson = () => {
   fs.writeFileSync(file, JSON.stringify(packageJSON, null, 2), 'utf-8')
 }
 
-const copyRecursiveSync = (src, dest) => {
+const copyRecursiveSync = (src: string, dest: string) => {
   fs.copySync(src, dest)
 
   fs.readdirSync(src)
-    .map(name => name)
-    .filter(dir => fs.lstatSync(path.join(src, dir)).isDirectory())
-    .forEach(dir => {
+    .map((name: string) => name)
+    .filter((dir: string) => fs.lstatSync(path.join(src, dir)).isDirectory())
+    .forEach((dir: string) => {
       copyRecursiveSync(path.join(src, dir), path.join(dest, dir))
     })
 }
@@ -41,7 +41,7 @@ const markPublic = () => {
 ;(() => {
   const compiler = webpack(config)
 
-  compiler.run(err => {
+  compiler.run((err: any) => {
     if (err) {
       console.log(err)
       return
