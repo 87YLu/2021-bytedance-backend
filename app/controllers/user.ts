@@ -8,12 +8,7 @@ import crypto from 'crypto'
 import { Context, Next } from 'koa'
 import { User } from '@models'
 import { secret } from '@db'
-import {
-  createVerification,
-  sendVerificationEmail,
-  checkVerification,
-  uploadFile,
-} from './utils'
+import { createVerification, sendVerificationEmail, checkVerification, uploadFile } from './utils'
 
 const emailRegex = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/
 
@@ -124,7 +119,6 @@ class UserCtl {
 
     if (user == null) {
       ctx.throw(401, '用户或密码错误')
-      return
     }
 
     const correct = bcrypt.compareSync(password, user.password)
@@ -217,13 +211,14 @@ class UserCtl {
    */
   async resetPassword(ctx: Context, next: Next) {
     ctx.verifyParams({
+      email: { type: 'string', required: true, pattern: emailRegex },
       newPassword: { type: 'string', required: true, minLength: 3 },
       verifyCode: { type: 'string', required: true, minLength: 6, maxLength: 6 },
     })
 
-    const { newPassword, verifyCode } = ctx.request.body
+    const { email, newPassword, verifyCode } = ctx.request.body
 
-    const passed = await checkVerification({ email: ctx.email, code: verifyCode, type: 2 })
+    const passed = await checkVerification({ email, code: verifyCode, type: 2 })
 
     if (passed === false) {
       ctx.throw(401, '验证码错误')
@@ -232,7 +227,7 @@ class UserCtl {
     const salt = bcrypt.genSaltSync(10)
     const psw = bcrypt.hashSync(newPassword, salt)
 
-    await User.findById(ctx.userId).updateOne({ password: psw })
+    await User.findOneAndUpdate({ email }, { password: psw })
 
     ctx.success()
 
