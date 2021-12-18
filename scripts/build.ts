@@ -10,6 +10,7 @@ const makePackageJson = () => {
 
   delete packageJSON.scripts
   delete packageJSON.devDependencies
+  delete packageJSON.mocha
 
   packageJSON.scripts = {
     start: 'node main.js',
