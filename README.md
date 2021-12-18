@@ -8,6 +8,12 @@
 
 `npm run build`：打包，生成一个 build 文件夹。文件夹里直接 `npm i` 然后 `npm start` 就可以跑起来
 
+`npm run test`：测试
+
+`npm run test-suite "user"`：测试用户模块
+
+`npm run test-suite "user login"`：测试用户模块下的登录模块
+
 
 
 sharp 装不上先依次执行
