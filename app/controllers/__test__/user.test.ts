@@ -1,33 +1,10 @@
 /* eslint-disable no-unused-expressions */
-import mongoose from 'mongoose'
-import { MongoMemoryServer } from 'mongodb-memory-server'
 import request from 'supertest'
 import { expect } from 'chai'
 import fs from 'fs'
 import path from 'path'
-import { User, VerifyCode } from '@models'
+import { VerifyCode } from '@models'
 import app from '@app'
-
-let mongoServer: any
-
-before(async () => {
-  mongoServer = await MongoMemoryServer.create()
-  const mongoUri = mongoServer.getUri()
-  await mongoose.connect(mongoUri)
-  await new User({
-    _id: '61ab2a606daa914b53fdd07c',
-    __v: '0',
-    avatar: 'http://localhost:8877/uploads/830e90b544c6930738b84617678734e51639484690825.jpg',
-    email: '934851346@qq.com',
-    name: 'cyc',
-    password: '$2a$10$kXwZqt8hRLnkrdoy26NAzeVNrmQZ50I/1jNXbhGTcTCml8freh0Ni', // 这是 1234
-  }).save()
-})
-
-after(async () => {
-  await mongoose.disconnect()
-  await mongoServer.stop()
-})
 
 let createCode: string
 let forgotCode: string

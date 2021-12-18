@@ -22,7 +22,6 @@ class NewsDigestCtl {
 
     if (targetNews == null) {
       ctx.throw(401, '找不到新闻主体')
-      return
     }
 
     const isCollection = (await Collection.findOne({ userId: ctx.userId, newsId: id })) != null

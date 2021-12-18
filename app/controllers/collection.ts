@@ -19,7 +19,6 @@ class CollectionCtl {
       targetNews = await News.findById(newsId)
     } catch (e) {
       ctx.throw(401, '找不到新闻主体')
-      return
     }
 
     if (targetNews == null) {
@@ -34,7 +33,7 @@ class CollectionCtl {
 
     await new Collection({
       userId: ctx.userId,
-      newsId: targetNews!._id,
+      newsId: targetNews._id,
     }).save()
 
     ctx.success()
