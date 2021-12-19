@@ -200,6 +200,15 @@ before(async () => {
       parentId: 'root',
       userId: '61b03e206ad5a4c002e47bef',
     },
+    {
+      _id: '61beca19bf6c7c927dbc92cb',
+      __v: '0',
+      content: 'ccc',
+      following: [],
+      newsId: '61aca353c646240c0bd29d0a',
+      parentId: 'root',
+      userId: '61ab2a606daa914b53fdd07c',
+    },
   ])
 
   await Like.insertMany([
