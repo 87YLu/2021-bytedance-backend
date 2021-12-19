@@ -16,7 +16,7 @@ const check = (params: IParams, rules: IRules) => {
     return targetType === type
   }
 
-  let currentKey: string = ''
+  let currentKey = ''
 
   try {
     for (const key of ruleKeys) {
@@ -36,15 +36,13 @@ const check = (params: IParams, rules: IRules) => {
 
       requireCheck(param, required)
 
-      if (required) {
-        typeCheck(param, type)
+      typeCheck(param, type)
 
-        isType('string', type) && stringCheck(param, { minLength, maxLength, min, max, pattern })
+      isType('string', type) && stringCheck({ minLength, maxLength, min, max, pattern }, param)
 
-        isType('number', type) && numberCheck(param, { min, max })
+      isType('number', type) && numberCheck({ min, max }, param)
 
-        isType('file', type) && fileCheck(param, { fileType, maxSize })
-      }
+      isType('file', type) && fileCheck({ fileType, maxSize }, param)
     }
   } catch (err: any) {
     return err.message.replace('{key}', currentKey)

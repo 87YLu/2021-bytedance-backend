@@ -4,10 +4,6 @@ import { IParams, IRules } from './types'
 
 export default function (app: Koa) {
   app.context.verifyParams = function (rules: IRules) {
-    if (rules == null) {
-      return
-    }
-
     let params: IParams
 
     params = ['GET', 'HEAD'].includes(this.method.toUpperCase())
@@ -29,16 +25,5 @@ export default function (app: Koa) {
     }
 
     this.throw(422, error)
-  }
-
-  return async function verifyParam(ctx: Koa.Context, next: Koa.Next) {
-    try {
-      await next()
-    } catch (err: any) {
-      if (err) {
-        ctx.throw(422, err)
-      }
-      throw err
-    }
   }
 }

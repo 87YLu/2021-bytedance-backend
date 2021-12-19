@@ -4,7 +4,11 @@ const byteToM = (byte: number) => {
 
 const defaultMaxSize = 100 * 1024 * 1024 // 100MB
 
-const fileCheck = (param: any, rules: { fileType?: string; maxSize?: number }) => {
+const fileCheck = (rules: { fileType?: string; maxSize?: number }, param: any) => {
+  if (param == null) {
+    return
+  }
+
   const { type, size } = param
   const { fileType, maxSize = defaultMaxSize } = rules
 

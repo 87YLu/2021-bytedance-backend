@@ -1,6 +1,10 @@
 import fs from 'fs'
 
 const typeCheck = (param: any, type: string | Array<string>) => {
+  if (param == null) {
+    return
+  }
+
   const paramType = Object.prototype.toString.call(param).slice(8, -1).toLowerCase()
   let flag = Array.isArray(type) ? type.includes(paramType) : type === paramType
 

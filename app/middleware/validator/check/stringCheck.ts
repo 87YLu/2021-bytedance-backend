@@ -1,5 +1,4 @@
 const stringCheck = (
-  param: string,
   rules: {
     minLength?: number
     maxLength?: number
@@ -7,7 +6,12 @@ const stringCheck = (
     max?: number
     pattern?: RegExp
   },
+  param?: string,
 ) => {
+  if (param == null) {
+    return
+  }
+
   const { minLength, maxLength, min, max, pattern } = rules
 
   const length = param.length
@@ -24,11 +28,17 @@ const stringCheck = (
     throw new Error('参数 {key} 的格式错误')
   }
 
-  if (min && min > Number(param)) {
+  if (min != null || max != null) {
+    if (isNaN(Number(param))) {
+      throw new Error('参数 {key} 的格式错误')
+    }
+  }
+
+  if (min != null && min > Number(param)) {
     throw new Error(`参数 {key} 必须大于或等于 ${min}`)
   }
 
-  if (max && max < Number(param)) {
+  if (max != null && max < Number(param)) {
     throw new Error(`参数 {key} 必须小于或等于 ${max}`)
   }
 }
