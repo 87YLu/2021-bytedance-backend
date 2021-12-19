@@ -6,8 +6,9 @@
     "dev": "nodemon -r tsconfig-paths/register scripts/start.ts",
     "build": "ts-node scripts/build.ts",
     "start": "cross-env NODE_ENV=production ts-node -r tsconfig-paths/register scripts/start.ts",
-    "test": "nyc --reporter=html mocha **/__test__/**.test.ts --exit",
-    "test-suite": "nyc --reporter=html mocha **/__test__/**.test.ts --exit --grep"
+    "test": "mocha **/__test__/**.test.ts --exit",
+    "test-suite": "mocha **/__test__/**.test.ts --exit --grep",
+    "coverage": "nyc --reporter=html mocha **/__test__/**.test.ts --exit"
   },
   "keywords": [],
   "author": "",
