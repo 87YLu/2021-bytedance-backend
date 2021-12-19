@@ -54,7 +54,6 @@ class CommentCtl {
 
         if (targetComment == null) {
           ctx.throw(401, '评论不存在')
-          return
         }
 
         const newComment = await new Comment({
@@ -96,7 +95,6 @@ class CommentCtl {
 
     if (targetComment == null) {
       ctx.throw(401, '评论不存在')
-      return
     }
 
     if (targetComment.userId.toString() !== ctx.userId) {

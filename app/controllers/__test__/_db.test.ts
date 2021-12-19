@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 import { MongoMemoryServer } from 'mongodb-memory-server'
-import { User, News, NewsType } from '@models'
+import { User, News, NewsType, Comment, Like } from '@models'
 
 let mongoServer: any
 
@@ -169,6 +169,49 @@ before(async () => {
       _id: '61ac7cdc136b0000a0001b78',
       typeId: '7',
       typeName: '国际',
+    },
+  ])
+
+  await Comment.insertMany([
+    {
+      _id: '61bdf90eed9fbca130337948',
+      __v: '0',
+      content: '新闻的评论',
+      following: ['61bdf950ed9fbca130337952'],
+      newsId: '61aca351c646240c0bd28f52',
+      parentId: 'root',
+      userId: '61b03e206ad5a4c002e47bef',
+    },
+    {
+      _id: '61bdf950ed9fbca130337952',
+      __v: '0',
+      content: '评论的评论',
+      following: [],
+      newsId: '61aca351c646240c0bd28f52',
+      parentId: '61bdf90eed9fbca130337948',
+      userId: '61ab2a606daa914b53fdd07c',
+    },
+    {
+      _id: '61bebdffec79aa4e33cb6bda',
+      __v: '0',
+      content: 'hhh',
+      following: [],
+      newsId: '61aca351c646240c0bd28f52',
+      parentId: 'root',
+      userId: '61b03e206ad5a4c002e47bef',
+    },
+  ])
+
+  await Like.insertMany([
+    {
+      _id: '61bec2ec411b4ec63adf358a',
+      userId: '61b03e206ad5a4c002e47bef',
+      commentId: '61bdf90eed9fbca130337948',
+    },
+    {
+      _id: '61bec71963f7439105753e17',
+      userId: '61b03e206ad5a4c002e47bef',
+      commentId: '61bdf950ed9fbca130337952',
     },
   ])
 })
