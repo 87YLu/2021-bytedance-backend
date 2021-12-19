@@ -1,6 +1,7 @@
 import mongoose from 'mongoose'
 import { MongoMemoryServer } from 'mongodb-memory-server'
-import { User, News, NewsType, Comment, Like } from '@models'
+import { User, News, NewsType, Comment, Like, Log } from '@models'
+import moment from 'moment'
 
 let mongoServer: any
 
@@ -25,6 +26,14 @@ before(async () => {
       email: '1790599287@qq.com',
       name: '87YLu',
       password: '$2a$10$NpSVbM56p0kjzHM6RKVqpeaaPbIS.oTQHG90kzdGhbeHvLIIWVb3W', // 123
+    },
+    {
+      _id: '61bed7394175ac5c2efd475b',
+      __v: '0',
+      avatar: 'http://localhost:8877/origins/origin_avatar.png',
+      email: '8@qq.com',
+      name: '8',
+      password: '$2a$10$24L1YTbVyKwN9y0uDD.x0uqONa8C8iGc7UVQfOZFTYPVH9wytKpyK', // 123
     },
   ])
 
@@ -221,6 +230,97 @@ before(async () => {
       _id: '61bec71963f7439105753e17',
       userId: '61b03e206ad5a4c002e47bef',
       commentId: '61bdf950ed9fbca130337952',
+    },
+  ])
+
+  await Log.insertMany([
+    {
+      _id: '61bed9f47724e363301d74dd',
+      __v: '0',
+      api: '/api/news/getNewsItem',
+      createdAt: moment().subtract(20, 'days').format('YYYY-MM-DD 00:mm:ss'),
+      params: { id: '61aca351c646240c0bd28f62' },
+      userId: '61bed7394175ac5c2efd475b',
+    },
+    {
+      _id: '61bed9f57724e363301d74e1',
+      __v: '0',
+      api: '/api/news/getNewsItem',
+      createdAt: moment().subtract(2, 'months').format('YYYY-MM-DD HH:mm:ss'),
+      params: { id: '61aca351c646240c0bd28f62' },
+      userId: '61bed7394175ac5c2efd475b',
+    },
+    {
+      _id: '61bed9f67724e363301d74e5',
+      __v: '0',
+      api: '/api/news/getNewsItem',
+      createdAt: moment().subtract(20, 'days').format('YYYY-MM-DD 16:mm:ss'),
+      params: { id: '61aca351c646240c0bd28f62' },
+      userId: '61bed7394175ac5c2efd475b',
+    },
+    {
+      _id: '61bed9f67724e363301d74e9',
+      __v: '0',
+      api: '/api/news/getNewsItem',
+      createdAt: moment().subtract(21, 'days').format('YYYY-MM-DD 17:mm:ss'),
+      params: { id: '61aca351c646240c0bd28f62' },
+      userId: '61bed7394175ac5c2efd475b',
+    },
+    {
+      _id: '61bed9f67724e363301d74ed',
+      __v: '0',
+      api: '/api/news/getNewsItem',
+      createdAt: moment().subtract(5, 'days').format('YYYY-MM-DD 12:mm:ss'),
+      params: { id: '61aca351c646240c0bd28f62' },
+      userId: '61bed7394175ac5c2efd475b',
+    },
+    {
+      _id: '61beda067724e363301d74f1',
+      __v: '0',
+      api: '/api/news/getNewsItem',
+      createdAt: moment().subtract(4, 'days').format('YYYY-MM-DD 13:mm:ss'),
+      params: { id: '61aca352c646240c0bd29598' },
+      userId: '61bed7394175ac5c2efd475b',
+    },
+    {
+      _id: '61beda067724e363301d74f5',
+      __v: '0',
+      api: '/api/news/getNewsItem',
+      createdAt: moment().subtract(20, 'days').format('YYYY-MM-DD 16:mm:ss'),
+      params: { id: '61aca352c646240c0bd29598' },
+      userId: '61bed7394175ac5c2efd475b',
+    },
+    {
+      _id: '61beda0e7724e363301d74f9',
+      __v: '0',
+      api: '/api/news/getNewsItem',
+      createdAt: moment().subtract(5, 'days').format('YYYY-MM-DD 18:mm:ss'),
+      params: { id: '61aca351c646240c0bd2911a' },
+      userId: '61bed7394175ac5c2efd475b',
+    },
+    {
+      _id: '61beda147724e363301d74fd',
+      __v: '0',
+      api: '/api/news/getNewsItem',
+      createdAt: moment().subtract(2, 'days').format('YYYY-MM-DD 19:mm:ss'),
+      params: { id: '61aca353c646240c0bd29d0a' },
+      userId: '61bed7394175ac5c2efd475b',
+    },
+    {
+      _id: '61beda147724e363301d7501',
+      __v: '0',
+      api: '/api/news/getNewsItem',
+      createdAt: moment().subtract(1, 'days').format('YYYY-MM-DD 20:mm:ss'),
+      params: { id: '61aca353c646240c0bd29d0a' },
+      userId: '61bed7394175ac5c2efd475b',
+    },
+    {
+      _id: '61beda157724e363301d7505',
+      __v: '0',
+      api: '/api/news/getNewsItem',
+      createdAt: moment().subtract(3, 'days').format('YYYY-MM-DD 21:mm:ss'),
+      params: { id: '61aca353c646240c0bd29d0a' },
+      userId: '61bed7394175ac5c2efd475b',
     },
   ])
 })
