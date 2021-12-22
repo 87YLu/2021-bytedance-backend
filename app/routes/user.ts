@@ -17,6 +17,25 @@ const router = new Router({
   prefix: '/user',
 })
 
+const LoginLimiter =
+  process.env.NODE_ENV === 'production'
+    ? RateLimit.middleware({
+        interval: { min: 1 },
+        max: 10,
+        handler: async ctx => {
+          ctx.status = 429
+          ctx.body = {
+            message: '请求过快，请稍后再尝试',
+            name: 'TooManyRequests',
+            status: 429,
+            success: false,
+          }
+        },
+      })
+    : async (ctx: Context, next: Next) => {
+        await next()
+      }
+
 const sendMailLimiter =
   process.env.NODE_ENV === 'production'
     ? RateLimit.middleware({
@@ -38,7 +57,7 @@ const sendMailLimiter =
 
 router.post('/create', create, addLog)
 
-router.post('/login', login, addLog)
+router.post('/login', LoginLimiter, login, addLog)
 
 router.post('/updateAvatar', getTokenId, updateAvatar, addLog)
 
