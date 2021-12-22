@@ -114,7 +114,7 @@ class CommentCtl {
   async getMyComments(ctx: Context, next: Next) {
     const { size, current } = ctx.query
     const { skip, limit } = paging(size as string | undefined, current as string | undefined)
-    const total = await Comment.count({ userId: ctx.userId })
+    const total = await Comment.countDocuments({ userId: ctx.userId })
     const temp = await Comment.find({ userId: ctx.userId })
       .sort('-createdAt')
       .skip(skip)
@@ -153,7 +153,7 @@ class CommentCtl {
       matches = { parentId: id }
     }
 
-    const total = await Comment.count({ ...matches })
+    const total = await Comment.countDocuments({ ...matches })
     const temp = await Comment.aggregate([
       {
         $lookup: {

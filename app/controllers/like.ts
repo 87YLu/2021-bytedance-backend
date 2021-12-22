@@ -91,7 +91,7 @@ class LikeCtl {
       .populate('commentId')
       .skip(skip)
       .limit(limit)
-    const total = await Like.count({ userId: ctx.userId })
+    const total = await Like.countDocuments({ userId: ctx.userId })
     const resPromise = temp.map(item => {
       const { _id, commentId: comment, createdAt } = item
       const { newsId, content, _id: commentId, userId: targetUserId } = comment as any

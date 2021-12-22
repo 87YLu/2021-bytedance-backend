@@ -39,7 +39,7 @@ class NewsDigestCtl {
     const { size, current, type, keyword = '' } = ctx.query
     const { skip, limit } = paging(size as string | undefined, current as string | undefined)
 
-    const total = await News.count({ type: Number(type) })
+    const total = await News.countDocuments({ type: Number(type) })
     const news = await News.find({ type: Number(type), title: new RegExp(keyword as string) })
       .select('+digest')
       .select('+img')

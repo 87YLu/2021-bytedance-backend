@@ -86,7 +86,7 @@ class CollectionCtl {
     const { size, current } = ctx.query
     const { skip, limit } = paging(size as string | undefined, current as string | undefined)
 
-    const total = await Collection.count({ userId: ctx.userId })
+    const total = await Collection.countDocuments({ userId: ctx.userId })
     const temp = await Collection.find({ userId: ctx.userId })
       .populate({ path: 'newsId', select: '+digest +img' })
       .sort('-createdAt')
