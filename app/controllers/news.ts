@@ -36,11 +36,11 @@ class NewsDigestCtl {
    * 分页获取新闻摘要
    */
   async getNewsDigest(ctx: Context, next: Next) {
-    const { size, current, type } = ctx.query
+    const { size, current, type, keyword = '' } = ctx.query
     const { skip, limit } = paging(size as string | undefined, current as string | undefined)
 
     const total = await News.count({ type: Number(type) })
-    const news = await News.find({ type: Number(type) })
+    const news = await News.find({ type: Number(type), title: new RegExp(keyword as string) })
       .select('+digest')
       .select('+img')
       .sort('-publishTime')
