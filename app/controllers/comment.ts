@@ -1,5 +1,5 @@
 import { Context, Next } from 'koa'
-import { Comment, News } from '@models'
+import { Comment, News, User } from '@models'
 import { paging, getCorrectTime } from './utils'
 
 class CommentCtl {
@@ -120,10 +120,32 @@ class CommentCtl {
       .skip(skip)
       .limit(limit)
 
-    const res = temp.map(item => {
+    const resPromise = temp.map(item => {
       const { _id, newsId, content, parentId, createdAt } = item
-      return { _id, newsId, content, parentId, time: getCorrectTime(createdAt) }
+      const obj = { _id, newsId, content, parentId, time: getCorrectTime(createdAt) }
+
+      return new Promise(resolve => {
+        News.findById(item.newsId).then(newsRes => {
+          const { title: newsTitle } = newsRes!
+          if (item.parentId !== 'root') {
+            Comment.findById(item.parentId).then(commentRes => {
+              User.findById(commentRes!.userId).then(userRes => {
+                const { name: userName, avatar: userAvatar } = userRes!
+                resolve(Object.assign(obj, { newsTitle, userName, userAvatar }))
+              })
+            })
+          } else {
+            resolve(Object.assign(obj, { newsTitle, userName: null, userAvatar: null }))
+          }
+        })
+      })
     })
+
+    const res = []
+
+    for await (const data of resPromise) {
+      res.push(data)
+    }
 
     ctx.success({ records: res, total })
 
