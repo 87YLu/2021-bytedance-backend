@@ -88,16 +88,24 @@ class CollectionCtl {
 
     const total = await Collection.count({ userId: ctx.userId })
     const temp = await Collection.find({ userId: ctx.userId })
-      .select('+digest')
-      .populate({ path: 'newsId', select: '+digest' })
+      .populate({ path: 'newsId', select: '+digest +img' })
       .sort('-createdAt')
       .skip(skip)
       .limit(limit)
 
     const res = temp.map(item => {
       const { _id, newsId: news, createdAt } = item
-      const { _id: newsId, title, digest, publishTime, source } = news as any
-      return { _id, newsId, title, digest, publishTime, source, time: getCorrectTime(createdAt) }
+      const { _id: newsId, title, digest, publishTime, source, img } = news as any
+      return {
+        _id,
+        newsId,
+        title,
+        digest,
+        img,
+        publishTime,
+        source,
+        time: getCorrectTime(createdAt),
+      }
     })
 
     ctx.success({ records: res, total })
