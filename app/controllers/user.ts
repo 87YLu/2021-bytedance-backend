@@ -233,6 +233,24 @@ class UserCtl {
 
     await next()
   }
+
+  /**
+   * 修改昵称
+   */
+  async updateName(ctx: Context, next: Next) {
+    ctx.verifyParams({
+      name: { type: 'string', required: true, maxLength: 8 },
+    })
+
+    const { name } = ctx.request.body
+    const user = (await User.findById(ctx.userId).select('+password'))!
+
+    await user.updateOne({ name })
+
+    ctx.success()
+
+    await next()
+  }
 }
 
 export default new UserCtl()

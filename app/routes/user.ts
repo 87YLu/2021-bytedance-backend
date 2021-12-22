@@ -11,6 +11,7 @@ const {
   sendCreateMail,
   sendForgotMail,
   resetPassword,
+  updateName,
 } = User
 
 const router = new Router({
@@ -68,5 +69,7 @@ router.get('/sendCreateMail', sendMailLimiter, sendCreateMail)
 router.get('/sendForgotMail', sendMailLimiter, sendForgotMail)
 
 router.post('/resetPassword', resetPassword)
+
+router.post('/updateName', getTokenId, updateName, addLog)
 
 export default router
