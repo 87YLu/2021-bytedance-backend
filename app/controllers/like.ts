@@ -1,5 +1,5 @@
 import { Context, Next } from 'koa'
-import { Like, Comment } from '@models'
+import { Like, Comment, User } from '@models'
 import { paging, getCorrectTime } from './utils'
 
 class LikeCtl {
@@ -91,14 +91,30 @@ class LikeCtl {
       .populate('commentId')
       .skip(skip)
       .limit(limit)
-
     const total = await Like.count({ userId: ctx.userId })
-
-    const res = temp.map(item => {
+    const resPromise = temp.map(item => {
       const { _id, commentId: comment, createdAt } = item
-      const { newsId, content, _id: commentId } = comment as any
-      return { _id, commentId, newsId, content, time: getCorrectTime(createdAt) }
+      const { newsId, content, _id: commentId, userId: targetUserId } = comment as any
+
+      return new Promise(resolve => {
+        User.findById(targetUserId).then(res => {
+          resolve({
+            _id,
+            commentId,
+            userName: res!.name,
+            userAvatar: res!.avatar,
+            newsId,
+            content,
+            time: getCorrectTime(createdAt),
+          })
+        })
+      })
     })
+    const res = []
+
+    for await (const data of resPromise) {
+      res.push(data)
+    }
 
     ctx.success({ records: res, total })
 
