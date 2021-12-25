@@ -6,10 +6,10 @@ import { getCorrectTime } from './utils'
 class LogCtl {
   async getMyLogs(ctx: Context) {
     ctx.verifyParams({
-      type: { type: ['string', 'number'], required: false, min: 1, max: 2 },
+      type: { type: ['string', 'number'], required: true, min: 1, max: 2 },
     })
 
-    const { type = 1 } = ctx.query
+    const { type } = ctx.query
 
     const $gte =
       Number(type) === 1
@@ -25,7 +25,7 @@ class LogCtl {
 
     actions.forEach(item => {
       if (item.api === '/api/news/getNewsItem') {
-        viewNewsId.push(item?.params?.id)
+        viewNewsId.push(item.params.id)
       }
 
       const time = Number(getCorrectTime(item.createdAt as Date, 'HH'))

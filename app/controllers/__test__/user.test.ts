@@ -3,7 +3,7 @@ import request from 'supertest'
 import { expect } from 'chai'
 import fs from 'fs'
 import path from 'path'
-import { VerifyCode } from '@models'
+import { VerifyCode, User } from '@models'
 import app from '@app'
 
 let createCode: string
@@ -187,6 +187,20 @@ describe('user', () => {
 
       expect(res.body.success).to.be.true
       expect(loginRes.body.success).to.be.true
+    })
+  })
+
+  describe('updateName', () => {
+    it('should be able to update name correctly', async function () {
+      const res1 = await request(app.listen())
+        .post('/api/user/updateName')
+        .set('Authorization', token)
+        .send({
+          name: '123',
+        })
+      const res2 = await User.findOne({ email: '934851346@qq.com' })
+      expect(res1.body.success).to.be.true
+      expect(res2!.name).to.be.equal('123')
     })
   })
 })

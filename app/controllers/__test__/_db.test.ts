@@ -218,6 +218,24 @@ before(async () => {
       parentId: 'root',
       userId: '61ab2a606daa914b53fdd07c',
     },
+    {
+      _id: '61c3126b52463b0a8268a683',
+      __v: '0',
+      content: '1',
+      following: [],
+      newsId: '61aca351c646240c0bd28f52',
+      parentId: 'root',
+      userId: '61b03e206ad5a4c002e47bef',
+    },
+    {
+      _id: '61c3126252463b0a8268a67a',
+      __v: '0',
+      content: '2',
+      following: [],
+      newsId: '61aca351c646240c0bd28f52',
+      parentId: '61c3126b52463b0a8268a683',
+      userId: '61b03e206ad5a4c002e47bef',
+    },
   ])
 
   await Like.insertMany([

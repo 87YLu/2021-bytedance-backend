@@ -243,7 +243,7 @@ class UserCtl {
     })
 
     const { name } = ctx.request.body
-    const user = (await User.findById(ctx.userId).select('+password'))!
+    const user = (await User.findById(ctx.userId))!
 
     await user.updateOne({ name })
 

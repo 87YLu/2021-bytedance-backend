@@ -109,12 +109,17 @@ describe('comment', () => {
         .get('/api/comment/getMyComments?size=1&current=4')
         .set('Authorization', token)
 
+      const res3 = await request(app.listen())
+        .get('/api/comment/getMyComments')
+        .set('Authorization', token)
+
       expect(res1.body.success).to.be.true
       expect(res1.body.data.records.length).to.be.equal(1)
-      expect(res1.body.data.total).to.be.equal(3)
+      expect(res1.body.data.total).to.be.equal(5)
       expect(res2.body.success).to.be.true
-      expect(res2.body.data.records.length).to.be.equal(0)
-      expect(res2.body.data.total).to.be.equal(3)
+      expect(res2.body.data.records.length).to.be.equal(1)
+      expect(res2.body.data.total).to.be.equal(5)
+      expect(res3.body.success).to.be.true
     })
   })
 
@@ -125,15 +130,11 @@ describe('comment', () => {
           '/api/comment/getComments?size=10&current=1&type=1&orderBy=1&id=61aca351c646240c0bd28f52',
         )
         .set('Authorization', token)
-      const {
-        body: {
-          data: { records, total },
-        },
-      } = res
+      const { records, total } = res.body.data
 
-      const { isMine, isLike, likesNum, followNum } = records[0]
+      const { isMine, isLike, likesNum, followNum } = records[1]
 
-      expect(total).to.be.equal(1)
+      expect(total).to.be.equal(2)
       expect(isMine).to.be.true
       expect(isLike).to.be.true
       expect(likesNum).to.be.equal(1)
@@ -147,11 +148,7 @@ describe('comment', () => {
         )
         .set('Authorization', token)
 
-      const {
-        body: {
-          data: { records, total },
-        },
-      } = res
+      const { records, total } = res.body.data
 
       expect(total).to.be.equal(2)
       expect(records[1].likesNum).to.lessThan(records[0].likesNum)
