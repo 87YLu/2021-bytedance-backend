@@ -125,19 +125,38 @@ class CommentCtl {
       const obj = { _id, newsId, content, parentId, time: getCorrectTime(createdAt) }
 
       return new Promise(resolve => {
-        News.findById(item.newsId).then(newsRes => {
-          const { title: newsTitle } = newsRes!
-          if (item.parentId !== 'root') {
-            Comment.findById(item.parentId).then(commentRes => {
-              User.findById(commentRes!.userId).then(userRes => {
-                const { name: userName, avatar: userAvatar } = userRes!
-                resolve(Object.assign(obj, { newsTitle, userName, userAvatar }))
+        News.findById(item.newsId)
+          .select('+img')
+          .then(newsRes => {
+            const { title: newsTitle, img: newsImg } = newsRes!
+            if (item.parentId !== 'root') {
+              Comment.findById(item.parentId).then(commentRes => {
+                const { content: targetCommentContent } = commentRes!
+                User.findById(commentRes!.userId).then(userRes => {
+                  const { name: userName, avatar: userAvatar } = userRes!
+                  resolve(
+                    Object.assign(obj, {
+                      newsTitle,
+                      newsImg,
+                      userName,
+                      userAvatar,
+                      targetCommentContent,
+                    }),
+                  )
+                })
               })
-            })
-          } else {
-            resolve(Object.assign(obj, { newsTitle, userName: null, userAvatar: null }))
-          }
-        })
+            } else {
+              resolve(
+                Object.assign(obj, {
+                  newsTitle,
+                  newsImg,
+                  userName: null,
+                  userAvatar: null,
+                  targetCommentContent: null,
+                }),
+              )
+            }
+          })
       })
     })
 
